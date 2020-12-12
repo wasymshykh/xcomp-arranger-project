@@ -44,8 +44,12 @@ ul {
     }
 
     &-logo {
+        width: 100%;
+        max-width: 260px;
+        display: block;
 
         &-row {
+            flex: 1;
             display: flex;
             align-items: center;
         }
@@ -61,10 +65,6 @@ ul {
             border-left: 1px solid rgba($color: #ffffff, $alpha: 0.2);
             padding-left: 1em;
         }
-
-        width: 50%;
-        max-width: 260px;
-        display: block;
 
         img {
             width: 100%;
