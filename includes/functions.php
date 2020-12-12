@@ -52,3 +52,32 @@ function get_ip() {
     }  
     return $ip;
 }  
+
+
+// get settings from the database and put them as associative array
+function get_settings ()
+{
+    global $db;
+
+    $s = $db->prepare("SELECT * FROM `tbl_settings`");
+    if (!$s->execute()) {
+        return false;
+    }
+    $rows = $s->fetchAll();
+
+    $data = [];
+    foreach ($rows as $row) {
+        $data[$row['setting_name']] = $row['setting_value'];
+    }
+    return $data;
+}
+
+// get a specific setting from the global settings array
+function get_setting ($name)
+{
+    global $settings;
+    if (array_key_exists($name, $settings)) {
+        return $settings[$name];
+    }
+    return '';
+}

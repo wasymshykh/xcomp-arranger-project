@@ -1,4 +1,7 @@
 <?php
+    use PayPal\Rest\ApiContext;
+    use PayPal\Auth\OAuthTokenCredential;
+
     session_start();
 
     // Main project directory
@@ -32,12 +35,20 @@
     
     // Auto load classes
     include DIR . 'config/auto_loader.php';
+    include DIR . 'vendor/autoload.php';
 
     // Functions
     include DIR . 'includes/functions.php';
+
     
     // Get db handle
     $db = (new DB())->connect();
 
+    $settings = get_settings();
     
+    define('PAYPAL_CLIENT_ID', get_setting('paypal_client_id'));
+    define('PAYPAL_CLIENT_SECRET', get_setting('paypal_client_secret'));
+    define('PRODUCT_COST', get_setting('product_cost'));
+
+    $apiContext = new ApiContext(new OAuthTokenCredential(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET));
 
