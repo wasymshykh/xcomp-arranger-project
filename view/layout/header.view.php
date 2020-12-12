@@ -8,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Poppins&display=swap" rel="stylesheet">
     
+    <?php if(isset($datatable)): ?>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <?php endif; ?>
+
     <link rel="stylesheet" href="<?=URL?>/static/css/style.css">
 
     <script src="https://kit.fontawesome.com/af845f7d3f.js" crossorigin="anonymous"></script>

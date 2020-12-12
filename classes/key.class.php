@@ -29,6 +29,35 @@ class Key
         return $this->_r(false, "Unable to execute the query");
     }
 
+    public function get_keys ()
+    {
+        $q = "SELECT * FROM `{$this->table}` WHERE `key_deleted` = 'N'";
+        $s = $this->db->prepare($q);
+        if ($s->execute()) {
+            return $s->fetchAll();
+        }
+        return [];
+    }
+
+    // update the key status
+    public function update_key_status ($status, $key_id)
+    {
+        $q = "UPDATE `{$this->table}` SET `key_status` = :s WHERE `key_id` = :k";
+        $s = $this->db->prepare($q);
+        $s->bindParam(":s", $status);
+        $s->bindParam(":k", $key_id);
+        return $s->execute();
+    }
+
+    // update the key deleted
+    public function update_key_deleted ($key_id)
+    {
+        $q = "UPDATE `{$this->table}` SET `key_deleted` = 'Y' WHERE `key_id` = :k";
+        $s = $this->db->prepare($q);
+        $s->bindParam(":k", $key_id);
+        return $s->execute();
+    }
+
     public function insert($fingerprint, $key, $ip)
     {
         $q = "INSERT INTO `{$this->table}` (`key_fingerprint`, `key_key`, `key_created_on`, `key_created_ip`) VALUE (:f, :k, :c, :i)";

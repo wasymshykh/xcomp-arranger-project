@@ -81,3 +81,27 @@ function get_setting ($name)
     }
     return '';
 }
+
+// update the specific settings
+function update_setting ($name, $value)
+{
+    global $db;
+    $s = $db->prepare("UPDATE `tbl_settings` SET `setting_value` = :v WHERE `setting_name` = :n");
+    $s->bindParam(":n", $name);
+    $s->bindParam(":v", $value);
+    return $s->execute();
+}
+
+function key_status($val)
+{
+    if ($val === 'A') {
+        return 'Active';
+    }
+    if ($val === 'U') {
+        return 'Inactive';
+    }
+    if ($val === 'B') {
+        return 'Blocked';
+    }
+    return "";
+}

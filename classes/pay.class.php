@@ -45,4 +45,14 @@ class Pay
         return false;
     }
 
+    public function get_payments ()
+    {
+        $q = "SELECT * FROM `{$this->table}` WHERE `payment_deleted` = 'N'";
+        $s = $this->db->prepare($q);
+        if ($s->execute()) {
+            return $s->fetchAll();
+        }
+        return [];
+    }
+
 }
