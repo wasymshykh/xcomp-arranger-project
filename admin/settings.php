@@ -81,8 +81,8 @@ if (isset($_POST) && !empty($_POST)) {
         $password = normal_text($_POST['password']);
 
         $code = 0;
-        if ($id !== get_setting('admin_username')) {
-            if (!update_setting('admin_username', $id)) {
+        if ($username !== get_setting('admin_username')) {
+            if (!update_setting('admin_username', $username)) {
                 $code = -1;
             }
         }
