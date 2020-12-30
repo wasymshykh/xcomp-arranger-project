@@ -105,3 +105,14 @@ function key_status($val)
     }
     return "";
 }
+
+function serial_status($val)
+{
+    if ($val === 'A') {
+        return 'Unused';
+    }
+    if ($val === 'U') {
+        return 'Used';
+    }
+    return "";
+}

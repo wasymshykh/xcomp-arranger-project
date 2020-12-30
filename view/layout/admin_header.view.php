@@ -17,6 +17,7 @@
 
         <div class="header-navigation">
             <a href="<?=URL?>/admin/keys.php"><i class="fas fa-key"></i> Keys</a>
+            <a href="<?=URL?>/admin/serial.php"><i class="fas fa-tasks"></i> Serial</a>
             <a href="<?=URL?>/admin/orders.php"><i class="fas fa-shopping-cart"></i> Orders</a>
             <a href="<?=URL?>/admin/settings.php"><i class="fas fa-cogs"></i> Settings</a>
             <a href="<?=URL?>/admin/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>

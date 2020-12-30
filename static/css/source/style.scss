@@ -722,6 +722,102 @@ td form {
     display: inline-block;
 }
 
+.serial {
+    display: flex;
+
+    &-left {
+        flex: 1;
+        border-right: 1px solid rgba($color: #ffffff, $alpha: 0.2);
+        padding-right: 1em;
+    }
+
+    &-right {
+        flex: 3;
+        padding-left: 1em;
+    }
+
+    &-heading {
+        font-size: 1.4em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-family: 'Oswald', sans-serif;
+        color: #ee344a;
+        position: relative;
+        display: inline-block;
+        margin-top: 0.5em;
+
+        &::before {
+            content: "";
+            width: 1em;
+            height: 4px;
+            background-color: #ee344a;
+            position: absolute;
+            top: 50%;
+            right: -1.4em;
+            transform: translateY(-50%);
+        }
+    }
+
+    &-input-row {
+        display: flex;
+        flex-direction: column;
+        margin: 1em 0;
+
+        label {
+            font-weight: 400;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 0.4em;
+        }
+
+        i {
+            color: #feffd0;
+            opacity: 0.8;
+            margin-right: 0.2em;
+        }
+        
+        input {
+            font-size: 1.1em;
+            font-family: inherit;
+            font-weight: 400;
+            padding: 0.5em 1em;
+            color: #ffffff;
+            background-color: rgba($color: #ffffff, $alpha: 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            outline: none;
+
+            &:focus {
+                border-color: #ee344a;
+            }
+        }
+    }
+
+    &-input-button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        
+        button {
+            font-size: 0.9em;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #f3f3f3;
+            background: linear-gradient(#ee344a, #cc172d);
+            padding: 0.4em 1em 0.5em 1em;
+            display: block;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            outline: none;
+        }
+    }
+
+}
 
 .setting {
     border-bottom: 1px solid rgba($color: #ffffff, $alpha: 0.2);

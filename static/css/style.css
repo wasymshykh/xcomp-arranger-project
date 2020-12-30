@@ -794,6 +794,119 @@ td form {
   display: inline-block;
 }
 
+.serial {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.serial-left {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  padding-right: 1em;
+}
+
+.serial-right {
+  -webkit-box-flex: 3;
+      -ms-flex: 3;
+          flex: 3;
+  padding-left: 1em;
+}
+
+.serial-heading {
+  font-size: 1.4em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Oswald', sans-serif;
+  color: #ee344a;
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5em;
+}
+
+.serial-heading::before {
+  content: "";
+  width: 1em;
+  height: 4px;
+  background-color: #ee344a;
+  position: absolute;
+  top: 50%;
+  right: -1.4em;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.serial-input-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 1em 0;
+}
+
+.serial-input-row label {
+  font-weight: 400;
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-bottom: 0.4em;
+}
+
+.serial-input-row i {
+  color: #feffd0;
+  opacity: 0.8;
+  margin-right: 0.2em;
+}
+
+.serial-input-row input {
+  font-size: 1.1em;
+  font-family: inherit;
+  font-weight: 400;
+  padding: 0.5em 1em;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+.serial-input-row input:focus {
+  border-color: #ee344a;
+}
+
+.serial-input-button {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.serial-input-button button {
+  font-size: 0.9em;
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #f3f3f3;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ee344a), to(#cc172d));
+  background: linear-gradient(#ee344a, #cc172d);
+  padding: 0.4em 1em 0.5em 1em;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  outline: none;
+}
+
 .setting {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
