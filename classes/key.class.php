@@ -58,12 +58,14 @@ class Key
         return $s->execute();
     }
 
-    public function insert($fingerprint, $key, $ip)
+    public function insert($fingerprint, $email, $serial, $key, $ip)
     {
-        $q = "INSERT INTO `{$this->table}` (`key_fingerprint`, `key_key`, `key_created_on`, `key_created_ip`) VALUE (:f, :k, :c, :i)";
+        $q = "INSERT INTO `{$this->table}` (`key_fingerprint`, `key_key`, `key_email`, `key_serial`, `key_created_on`, `key_created_ip`) VALUE (:f, :k, :e, :s, :c, :i)";
         $s = $this->db->prepare($q);
         $s->bindParam(":f", $fingerprint);
         $s->bindParam(":k", $key);
+        $s->bindParam(":e", $email);
+        $s->bindParam(":s", $serial);
         $datetime = current_date();
         $s->bindParam(":c", $datetime);
         $s->bindParam(":i", $ip);

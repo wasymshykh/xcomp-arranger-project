@@ -15,6 +15,8 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
 
 $s = new Serial($db);
 
+var_dump($s->generate_unqiue_serial());
+
 if (isset($_POST) && !empty($_POST)) {
 
     if (isset($_POST['delete']) && !empty(normal_text($_POST['delete'])) && is_numeric($_POST['delete'])) {

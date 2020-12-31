@@ -58,6 +58,49 @@ class Serial
         $s->bindParam(":k", $serial_id);
         return $s->execute();
     }
+    
+    // update the serial email
+    public function update_serial_email ($email, $serial_id)
+    {
+        $q = "UPDATE `{$this->table}` SET `serial_email` = :e WHERE `serial_id` = :k";
+        $s = $this->db->prepare($q);
+        $s->bindParam(":e", $email);
+        $s->bindParam(":k", $serial_id);
+        return $s->execute();
+    }
+
+    // generating random serial that is not in the database
+    public function generate_unqiue_serial ()
+    {
+        $failure = 0;
+        $nonunique = 0;
+        $got = false;
+        while (!$got) {
+            $generated_code = $this->random_serial();
+            $r = $this->get_serial_by('serial_code', $generated_code);
+            if ($r['status']) {
+                if (!$r['message']) {
+                    return $this->_r(true, $generated_code);
+                } else {
+                    $nonunique += 1;
+                }
+            } else {
+                $failure += 1;
+            }
+
+            if ($failure > 15 || $nonunique > 160) {
+                return $this->_r(false, "Resource limit exceeded while generating code.");
+            }
+        }
+    }
+    private function random_serial ($length=12, $chars='0123456789') {
+        $str_arr = [];
+        $max = mb_strlen($chars, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+            $str_arr []= $chars[random_int(0, $max)];
+        }
+        return implode('', $str_arr);
+    }
 
     // returns the message and status as an associative array
     private function _r ($status, $message = "")

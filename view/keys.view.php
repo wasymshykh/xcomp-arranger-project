@@ -9,9 +9,11 @@
         <tr>
             <th>#</th>
             <th>Fingerprint</th>
+            <th>Serial</th>
             <th>Key</th>
             <th>Generated On</th>
             <th>User IP</th>
+            <th>Email</th>
             <th>Status</th>
             <th></th>
         </tr>
@@ -21,9 +23,11 @@
         <tr>
             <td><?=$key['key_id']?></td>
             <td><?=$key['key_fingerprint']?></td>
+            <td><?=$key['key_serial']?></td>
             <td><?=$key['key_key']?></td>
             <td><?=normal_date($key['key_created_on'])?></td>
             <td><?=$key['key_created_ip']?></td>
+            <td><?=$key['key_email']?></td>
             <td><?=key_status($key['key_status'])?></td>
             <td>
                 <?php if($key['key_status'] === 'A'): ?>
