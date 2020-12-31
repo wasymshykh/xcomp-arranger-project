@@ -1,5 +1,8 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 // class contains all the functions related to database and serial
 class Serial
 {
@@ -58,7 +61,7 @@ class Serial
         $s->bindParam(":k", $serial_id);
         return $s->execute();
     }
-    
+
     // update the serial email
     public function update_serial_email ($email, $serial_id)
     {
@@ -100,6 +103,25 @@ class Serial
             $str_arr []= $chars[random_int(0, $max)];
         }
         return implode('', $str_arr);
+    }
+
+    public function send_serial_to_email (PHPMailer $mail, $serial_code)
+    {
+        try {
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Thank you for your purchase!';
+            $mail->Body = 'Your unique serial code is: <b>'.$serial_code.'</b>';
+            $mail->send();
+            
+            return true;
+        } catch (Exception $e) {
+            $error = "Email could not be sent. Mailer Error.";
+            if (PROJECT_MODE === 'development') {
+                $error .= " {$mail->ErrorInfo}";
+            }
+        }
+        return $error;
     }
 
     // returns the message and status as an associative array
