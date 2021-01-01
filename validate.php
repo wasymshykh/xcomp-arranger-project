@@ -3,141 +3,143 @@
 require_once 'config/init.php';
 $k = new Key($db);
 
-$request_data = file_get_contents('php://input');
-if (!empty($request_data)) {
+if (isset($_GET['code']) && !empty($_GET['code']) && is_string($_GET['code'])) {
+    $request_data = $_GET['code'];
+    if (!empty($request_data)) {
 
-    // checking if data is in correct format
+        // checking if data is in correct format
 
-    $request_data_split = explode(' ', normal_text($request_data));
-    // filtering array
-    for ($i = 0; $i < count($request_data_split); $i++) {
-        $request_data_split[$i] = normal_text($request_data_split[$i]);
-        if (empty($request_data_split[$i])) {
-            unset($request_data_split[$i]);
+        $request_data_split = explode(' ', normal_text($request_data));
+        // filtering array
+        for ($i = 0; $i < count($request_data_split); $i++) {
+            $request_data_split[$i] = normal_text($request_data_split[$i]);
+            if (empty($request_data_split[$i])) {
+                unset($request_data_split[$i]);
+            }
         }
-    }
 
-    if (count($request_data_split) === 3) {
-        
-        // adding data to variables
-        $email = $request_data_split[0];
-        $serial = $request_data_split[1];
-        $str = $request_data_split[2];
-        $fingerprint = $str;
+        if (count($request_data_split) === 3) {
+            
+            // adding data to variables
+            $email = $request_data_split[0];
+            $serial = $request_data_split[1];
+            $str = $request_data_split[2];
+            $fingerprint = $str;
 
-        // finding if serial is available
+            // finding if serial is available
 
-        $s = new Serial($db);
-        
-        $_serial_data = $s->get_serial_by('serial_code', $serial);
-        
+            $s = new Serial($db);
+            
+            $_serial_data = $s->get_serial_by('serial_code', $serial);
+            
 
-        if ($_serial_data['status']) {
-            if ($_serial_data['message']) {
-                $_serial_data = $_serial_data['message'];
+            if ($_serial_data['status']) {
+                if ($_serial_data['message']) {
+                    $_serial_data = $_serial_data['message'];
 
-                if (empty($_serial_data['serial_email']) || $_serial_data['serial_email'] === $email) {
+                    if (empty($_serial_data['serial_email']) || $_serial_data['serial_email'] === $email) {
 
-                    // if serial is used then it will checked against fingerprint in database
-                    if ($_serial_data['serial_status'] === 'U') {
+                        // if serial is used then it will checked against fingerprint in database
+                        if ($_serial_data['serial_status'] === 'U') {
 
-                        $check = $k->get_key_by('key_serial', $_serial_data['serial_code']);
-                        if ($check['status']) {
-                            $ip = get_ip();
-                            if ($check['message'] === false) {
-                                $k->record_failure($_serial_data['serial_id'], $ip, "Cannot find record against used serial code.");
-                                http_response_code(509);
-                                die();
-                            }
-                            $_key_data = $check['message'];
-
-                            if ($_key_data['key_fingerprint'] === $fingerprint) {
-                                
-                                echo $_key_data['key_key'];
-                                http_response_code(200);
-                                die();
-                                
-                            } else {
-                                $k->record_failure($_key_data['key_id'], $ip, "Requested key again with different fingerprint.");
-                                http_response_code(509);
-                                die();
-                            }
-
-                        }
-                        
-                        die ('cool');
-                        
-                    } else if ($_serial_data['serial_status'] === 'A') {
-                        // if serial is unused then key will be generated against fingerprint and stored in the database, serial is then set to used
-    
-                        SWP_Initialize(0x81645732, 0x19573549);
-                        $key = XCBC($str);
-                        
-                        // checking if the generated key is valid in length
-                        if (!(strlen($key) > 16)) {
-    
-                            $check = $k->get_key_by('key_fingerprint', $fingerprint);
-
+                            $check = $k->get_key_by('key_serial', $_serial_data['serial_code']);
                             if ($check['status']) {
                                 $ip = get_ip();
-                                
-                                if ($check['message'] !== false) {
-                                    // key is already in the database
+                                if ($check['message'] === false) {
+                                    $k->record_failure($_serial_data['serial_id'], $ip, "Cannot find record against used serial code.");
+                                    http_response_code(509);
+                                    die();
+                                }
+                                $_key_data = $check['message'];
+
+                                if ($_key_data['key_fingerprint'] === $fingerprint) {
                                     
-                                    // recording the failure
-                                    $k->record_failure($check['message']['key_id'], $ip, "Key was already existed in the database");
+                                    echo $_key_data['key_key'];
+                                    http_response_code(200);
+                                    die();
                                     
-                                    // returning 509 response
+                                } else {
+                                    $k->record_failure($_key_data['key_id'], $ip, "Requested key again with different fingerprint.");
                                     http_response_code(509);
                                     die();
                                 }
 
-                                // inserting key into the database
-                                $result = $k->insert($fingerprint, $email, $serial, $key, $ip);
-                                if ($result['status']) {
-                                    // data is successfully inserted
-                                        // returning the key to user with status code of 200
+                            }
+                            
+                            die ('cool');
+                            
+                        } else if ($_serial_data['serial_status'] === 'A') {
+                            // if serial is unused then key will be generated against fingerprint and stored in the database, serial is then set to used
+        
+                            SWP_Initialize(0x81645732, 0x19573549);
+                            $key = XCBC($str);
+                            
+                            // checking if the generated key is valid in length
+                            if (!(strlen($key) > 16)) {
+        
+                                $check = $k->get_key_by('key_fingerprint', $fingerprint);
 
-                                    // updating serial status
-                                    $s->update_serial_status('U', $_serial_data['serial_id']);
-
-                                    if (empty($_serial_data['serial_email'])) {
-                                        $s->update_serial_email($email, $_serial_data['serial_id']);
+                                if ($check['status']) {
+                                    $ip = get_ip();
+                                    
+                                    if ($check['message'] !== false) {
+                                        // key is already in the database
+                                        
+                                        // recording the failure
+                                        $k->record_failure($check['message']['key_id'], $ip, "Key was already existed in the database");
+                                        
+                                        // returning 509 response
+                                        http_response_code(509);
+                                        die();
                                     }
 
-                                    echo $key;
-                                    http_response_code(200);
-                                    die();
+                                    // inserting key into the database
+                                    $result = $k->insert($fingerprint, $email, $serial, $key, $ip);
+                                    if ($result['status']) {
+                                        // data is successfully inserted
+                                            // returning the key to user with status code of 200
 
+                                        // updating serial status
+                                        $s->update_serial_status('U', $_serial_data['serial_id']);
+
+                                        if (empty($_serial_data['serial_email'])) {
+                                            $s->update_serial_email($email, $_serial_data['serial_id']);
+                                        }
+
+                                        echo $key;
+                                        http_response_code(200);
+                                        die();
+
+                                    } else {
+                                        // unable to execute query
+                                        // returning status code 500
+                                        http_response_code(500);
+                                        die();
+                                    }
+                                    
                                 } else {
                                     // unable to execute query
-                                    // returning status code 500
+                                        // returning status code 500
                                     http_response_code(500);
                                     die();
                                 }
-                                
-                            } else {
-                                // unable to execute query
-                                    // returning status code 500
-                                http_response_code(500);
-                                die();
+        
                             }
-    
+                            
                         }
-                        
+
                     }
 
                 }
-
+            } else {
+                // unable to execute query
+                    // returning status code 500
+                http_response_code(500);
+                die();
             }
-        } else {
-            // unable to execute query
-                // returning status code 500
-            http_response_code(500);
-            die();
         }
-    }
 
+    }
 }
 
 // returning error for invalid request

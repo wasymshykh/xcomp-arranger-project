@@ -76,7 +76,7 @@ function get_settings ()
 function get_setting ($name)
 {
     global $settings;
-    if (array_key_exists($name, $settings)) {
+    if ($settings && is_array($settings) && array_key_exists($name, $settings)) {
         return $settings[$name];
     }
     return '';
